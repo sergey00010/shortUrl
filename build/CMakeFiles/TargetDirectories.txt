@@ -1,0 +1,3 @@
+/home/forcks/projects/shortUrl/build/CMakeFiles/shortUrl.dir
+/home/forcks/projects/shortUrl/build/CMakeFiles/edit_cache.dir
+/home/forcks/projects/shortUrl/build/CMakeFiles/rebuild_cache.dir
