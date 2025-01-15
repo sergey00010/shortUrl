@@ -5,7 +5,7 @@
 using json = nlohmann::json;
 
 ShortenUrl::ShortenUrl() {
-    counter = 0;
+    counter = 10;
 }
 
 std::string ShortenUrl::shorten(const std::string& long_url) {
@@ -32,7 +32,11 @@ std::string ShortenUrl::generateShortURL() {
     //return one symbol if result is empty
     if (short_url.empty())
         short_url.push_back(base62Chars[0]);
-    return short_url;
+    return "/"+short_url;
+}
+
+std::unordered_map<std::string, std::string>  ShortenUrl::getMap() {
+    return url_map;
 }
 
 void ShortenUrl::loadFromJson(const std::string& filename) {
@@ -56,3 +60,5 @@ void ShortenUrl::saveToJson(const std::string& filename) {
         output_file.close();
     }
 }
+
+

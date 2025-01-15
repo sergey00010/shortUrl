@@ -1,30 +1,58 @@
+/*
+ *  create by Sergey Kuzmenko for infotecs
+ *  in 2025 year
+ *
+ *  RedirectServer use to process requests coming to the server and
+ *  redirect user to original url from short url (if short url exist in app)
+ *
+ *  ShortenUrl use to generate short url from original (long) url.
+ *  The short address is created based on the link sequence number converted to a base62 number
+ *
+ */
+
 #include <iostream>
 #include <ShortenUrl.h>
+#include <RedirectServer.h>
+#include <thread>
 
 int main() {
-  ShortenUrl shortenUrl;
+     unsigned short port = 8080;
+    try {
+        std::thread server_thread([=]() {
+            try {
+                RedirectServer server("127.0.0.1", port);
+                std::cout << "Server running on http://127.0.0.1:"<<port<< std::endl;
+                server.run();
+            } catch (const std::exception& e) {
+                std::cout << "Error: " << e.what() << std::endl;
+            }
+        });
 
-  // load data from json file
-  shortenUrl.loadFromJson("urls.json");
+        //ShortenUrl shortenUrl;
+        //shortenUrl.loadFromJson("urls.json");
 
-  //std::string long_url;
-  //std::cout << "Enter a long URL: ";
-  //std::cin >> long_url;
+        /*
+        for (int i = 0; i < 5; i++) {
+            std::string long_url = std::to_string(i);
+            std::string short_url = shortenUrl.shorten(long_url);
+            std::cout << "Shortened URL: http://127.0.0.1/" << short_url << std::endl;
+            shortenUrl.saveToJson("urls.json");
+        }
+        */
 
-  for(int i = 0;i<1000;i++){
-    std::string long_url = std::to_string(i);
-    //generate short url
-    std::string short_url = shortenUrl.shorten(long_url);
-    std::cout << "Shortened URL: http://127.0.0.1/" << short_url << std::endl;
+        ShortenUrl shortenUrl;
+        shortenUrl.loadFromJson("urls.json");
+        std::string long_url = "https://ya.ru";
+        std::string short_url = shortenUrl.shorten(long_url);
+        std::cout << "Shortened URL: http://127.0.0.1:"<<port<< short_url << std::endl;
+        shortenUrl.saveToJson("urls.json");
 
-    //Save data to json
-    shortenUrl.saveToJson("urls.json");
-  }
 
-  // find original link from short url
-  //std::cout << "Enter a short URL: ";
-  //std::cin >> short_url;
-  //std::cout << "Original URL: " << shortenUrl.getOriginalURL(short_url) << std::endl;
+        server_thread.join();
 
-  return 0;
+    } catch (const std::exception& e) {
+        std::cout << "Error: " << e.what() << std::endl;
+    }
+
+    return 0;
 }

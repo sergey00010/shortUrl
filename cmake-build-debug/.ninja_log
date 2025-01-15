@@ -1,7 +1,0 @@
-# ninja log v6
-2	2170	1736958481409607221	CMakeFiles/shortUrl.dir/src/main.cpp.o	f76e7e1a056b7ffa
-3	4285	1736958481410607160	CMakeFiles/shortUrl.dir/src/ShortenUrl.cpp.o	5d3a288fa40df84a
-4285	4466	1736958485694348089	shortUrl	f33b23a1ac49e93b
-5	2355	1736959358295361457	CMakeFiles/shortUrl.dir/src/main.cpp.o	f76e7e1a056b7ffa
-6	4364	1736959358296361412	CMakeFiles/shortUrl.dir/src/ShortenUrl.cpp.o	5d3a288fa40df84a
-4364	4551	1736959362654166750	shortUrl	f33b23a1ac49e93b

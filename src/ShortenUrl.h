@@ -13,6 +13,7 @@ public:
     std::string getOriginalURL(const std::string& short_url);
     void loadFromJson(const std::string& filename);
     void saveToJson(const std::string& filename);
+    std::unordered_map<std::string, std::string>  getMap();
 
 private:
     //shorts and original urls

@@ -1,3 +1,0 @@
-/home/forcks/projects/shortUrl/cmake-build-debug/CMakeFiles/shortUrl.dir
-/home/forcks/projects/shortUrl/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/forcks/projects/shortUrl/cmake-build-debug/CMakeFiles/rebuild_cache.dir
