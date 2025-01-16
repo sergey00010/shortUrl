@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(LIBS_DIR "${CMAKE_SOURCE_DIR}/libs")
-add_subdirectory("${LIBS_DIR}/json")
+add_subdirectory("${LIBS_DIR}/nlohmann_json")
 
 set(BOOST_ROOT "${LIBS_DIR}/boost")
 find_package(Boost REQUIRED)
