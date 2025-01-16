@@ -5,7 +5,7 @@
 using json = nlohmann::json;
 
 ShortenUrl::ShortenUrl() {
-    counter = 10;
+    counter = 0;
 }
 
 std::string ShortenUrl::shorten(const std::string& long_url) {

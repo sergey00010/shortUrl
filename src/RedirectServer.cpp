@@ -4,17 +4,22 @@
 #include <string>
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
+#include <boost/json.hpp>
 
 namespace http = boost::beast::http;
 namespace ip = boost::asio::ip;
 
-RedirectServer::RedirectServer(const std::string& address, unsigned short port)
+using json = nlohmann::json;
+
+RedirectServer::RedirectServer(const std::string &address, unsigned short port , const std::string &public_address)
     : acceptor(io_service)
 {
     ip::tcp::endpoint endpoint(ip::address::from_string(address), port);
     acceptor.open(endpoint.protocol());
     acceptor.bind(endpoint);
     acceptor.listen();
+
+    *public_addr = public_address;
 }
 
 void RedirectServer::run() {
@@ -73,23 +78,55 @@ void RedirectServer::handle_request(http::request<http::string_body>& req,
                                      http::response<http::string_body>& res) {
     std::string path(req.target());
 
-    ShortenUrl shortenUrl;
-    shortenUrl.loadFromJson("urls.json");
+    if (path == "/api/createUrl" && req.method() == http::verb::post){
+        try {
+            // parse the incoming request to json
+            auto parsed_json = json::parse(req.body());
 
-    //find map
-    std::unordered_map<std::string, std::string> url_map = shortenUrl.getMap();
-    std::unordered_map<std::string, std::string>::iterator it = url_map.find(path);
+            // extract the link
+            std::string originalUrl = parsed_json.contains("url") ? parsed_json["url"].get<std::string>() : "";
 
-    if (it != url_map.end()) {
-        res.result(http::status::found);
-        //redirect to long url
-        res.set(http::field::location, it->second);
-        res.set(http::field::content_length, "0");
-    } else {
-        res.result(http::status::not_found);
-        res.set(http::field::content_length, "0");
+            //create short url
+            ShortenUrl shortenUrl;
+            shortenUrl.loadFromJson("urls.json");
+            std::string short_url = shortenUrl.shorten(originalUrl);
+            shortenUrl.saveToJson("urls.json");
+
+            // create json to send short url
+            json json_response;
+            json_response["short_url"] =  *public_addr + short_url;
+
+            std::string body = json_response.dump();
+            res.result(http::status::ok);
+            res.set(http::field::content_type, "application/json");
+            res.body() = body;
+            res.set(http::field::content_length, std::to_string(body.size()));
+        } catch (const json::exception& e) {
+            // Обработка ошибки парсинга JSON
+            res.result(http::status::bad_request);
+            res.set(http::field::content_type, "application/json");
+            res.body() = R"({"error":"Invalid JSON format"})";
+            res.set(http::field::content_length, std::to_string(res.body().size()));
+        }
+    }else {
+        ShortenUrl shortenUrl;
+        shortenUrl.loadFromJson("urls.json");
+
+        //find map
+        std::unordered_map<std::string, std::string> url_map = shortenUrl.getMap();
+        std::unordered_map<std::string, std::string>::iterator it = url_map.find(path);
+
+        if (it != url_map.end()) {
+            res.result(http::status::found);
+            //redirect to long url
+            res.set(http::field::location, it->second);
+            res.set(http::field::content_length, "0");
+        } else {
+            res.result(http::status::not_found);
+            res.set(http::field::content_length, "0");
+        }
+        res.set(http::field::connection, "close");
     }
-    res.set(http::field::connection, "close");
 }
 
 void RedirectServer::stop() {

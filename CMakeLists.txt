@@ -16,6 +16,9 @@ add_executable(shortUrl
         src/ShortenUrl.cpp
         src/RedirectServer.cpp
         src/RedirectServer.h
+        src/ServerData.cpp
+        src/ServerData.h
 )
 
-target_include_directories(shortUrl PRIVATE include)
+set(SOURCE_FILE "server_config.json")
+file(COPY ${SOURCE_FILE} DESTINATION ${CMAKE_BINARY_DIR})
