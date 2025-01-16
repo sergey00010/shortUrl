@@ -6,7 +6,7 @@
 #define SERVERDATA_H
 
 /*
- * ServerDate has to save to json and load from json data about server
+ * ServerData has to save to json and load from json data about server
  * public address, id_address, port
  */
 
