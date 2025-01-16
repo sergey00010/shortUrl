@@ -87,8 +87,9 @@ void RedirectServer::handle_request(http::request<http::string_body>& req,
             std::string originalUrl = parsed_json.contains("url") ? parsed_json["url"].get<std::string>() : "";
 
             //create short url
-            ShortenUrl shortenUrl;
+            ShortenUrl &shortenUrl = ShortenUrl::getInstance();
             shortenUrl.loadFromJson("urls.json");
+
             std::string short_url = shortenUrl.shorten(originalUrl);
             shortenUrl.saveToJson("urls.json");
 
@@ -102,15 +103,13 @@ void RedirectServer::handle_request(http::request<http::string_body>& req,
             res.body() = body;
             res.set(http::field::content_length, std::to_string(body.size()));
         } catch (const json::exception& e) {
-            // Обработка ошибки парсинга JSON
             res.result(http::status::bad_request);
             res.set(http::field::content_type, "application/json");
             res.body() = R"({"error":"Invalid JSON format"})";
             res.set(http::field::content_length, std::to_string(res.body().size()));
         }
     }else {
-        ShortenUrl shortenUrl;
-        shortenUrl.loadFromJson("urls.json");
+        ShortenUrl &shortenUrl = ShortenUrl::getInstance();
 
         //find map
         std::unordered_map<std::string, std::string> url_map = shortenUrl.getMap();

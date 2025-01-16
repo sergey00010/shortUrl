@@ -38,8 +38,8 @@ int main() {
             }
         });
 
-        //ShortenUrl shortenUrl;
-        //shortenUrl.loadFromJson("urls.json");
+        ShortenUrl &shortenUrl = ShortenUrl::getInstance();
+        shortenUrl.loadFromJson("urls.json");
 
         /*
         for (int i = 0; i < 5; i++) {

@@ -12,7 +12,12 @@
  */
 class ShortenUrl {
 public:
-    ShortenUrl();
+    static ShortenUrl& getInstance() {
+        std::call_once(initInstanceFlag, []() {
+            instance.reset(new ShortenUrl());
+        });
+        return *instance;
+    }
 
     //get short url from original url (if exist)
     std::string shorten(const std::string& long_url);
@@ -29,6 +34,9 @@ public:
     std::unordered_map<std::string, std::string>  getMap();
 
 private:
+    ShortenUrl();
+    static std::unique_ptr<ShortenUrl> instance;
+    static std::once_flag initInstanceFlag;
     //shorts and original urls
     std::unordered_map<std::string, std::string> url_map;
 

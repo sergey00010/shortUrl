@@ -4,6 +4,9 @@
 
 using json = nlohmann::json;
 
+std::unique_ptr<ShortenUrl> ShortenUrl::instance = nullptr;
+std::once_flag ShortenUrl::initInstanceFlag;
+
 ShortenUrl::ShortenUrl() {
     counter = 0;
 }
