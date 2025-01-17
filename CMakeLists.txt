@@ -29,3 +29,5 @@ target_link_libraries(shortUrl PRIVATE nlohmann_json::nlohmann_json)
 
 set(SOURCE_FILE "server_config.json")
 file(COPY ${SOURCE_FILE} DESTINATION ${CMAKE_BINARY_DIR})
+
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/urls)

@@ -88,10 +88,10 @@ void RedirectServer::handle_request(http::request<http::string_body>& req,
 
             //create short url
             ShortenUrl &shortenUrl = ShortenUrl::getInstance();
-            shortenUrl.loadFromJson("urls.json");
+            shortenUrl.loadFromJson("./urls/urls.json");
 
             std::string short_url = shortenUrl.shorten(originalUrl);
-            shortenUrl.saveToJson("urls.json");
+            shortenUrl.saveToJson("./urls/urls.json");
 
             // create json to send short url
             json json_response;

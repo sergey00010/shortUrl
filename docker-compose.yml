@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  shorturl:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./app_docker:/app/build/urls
+    ports:
+      - "9999:9999"

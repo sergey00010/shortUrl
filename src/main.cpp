@@ -28,7 +28,7 @@ int main() {
     server_data.loadConfig("server_config.json",port, server_addr, server_public_addr);
 
     ShortenUrl &shortenUrl = ShortenUrl::getInstance();
-    shortenUrl.loadFromJson("urls.json");
+    shortenUrl.loadFromJson("./urls/urls.json");
 
     try {
         std::thread server_thread([=]() {
